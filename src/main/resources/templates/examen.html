@@ -4,8 +4,82 @@
     <meta charset="UTF-8">
     <title>Calcular Comisión</title>
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: #ffffff;
+        }
+        .card-header {
+            background-color: #6c757d;  /* Cambié el color de fondo de azul a gris */
+            color: #ffffff;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 15px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .btn-outline-success {
+            border-color: #28a745;
+            color: #28a745;
+        }
+        .btn-outline-success:hover {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-outline-danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-outline-warning {
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+        .btn-outline-warning:hover {
+            background-color: #ffc107;
+            color: white;
+        }
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
+
 <div class="card">
     <div class="card-header">
         CALCULAR COMISIÓN
@@ -20,31 +94,32 @@
                 <label for="comision" class="form-label">COMISIÓN CALCULADA:</label>
                 <input type="text" class="form-control" id="comision" th:value="${comisionCalculada}" readonly>
             </div>
-            <button type="submit" class="btn btn-outline-success">CALCULAR COMISION</button>
+            <button type="submit" class="btn btn-outline-success">CALCULAR COMISIÓN</button>
         </form>
     </div>
 </div>
+
 <div class="card">
     <div class="card-header">
         CALCULE SU DESCUENTO POR ANTIGUEDAD:
     </div>
     <div class="card-body">
-        <form>
+        <form th:action="@{/calcularDescuento}" th:object="${descuentomodel}" method="post">
             <div class="mb-3">
                 <label for="txtpreciop" class="form-label">Ingrese el precio de su producto:</label>
-                <input type="number"  class="form-control" id="txtpreciop" placeholder="name@example.com">
+                <input type="number"  class="form-control" id="txtpreciop" th:field="*{producto}" required>
             </div>
             <div class="mb-3">
                 <label for="txtaños" class="form-label">Ingrese los años comprando en la tienda :</label>
-                <input type="number"  class="form-control" id="txtaños" placeholder="name@example.com">
+                <input type="number"  class="form-control" id="txtaños" th:field="*{tiempoComprando}" required>
             </div>
             <div class="mb-3">
                 <label for="txtdescuento" class="form-label">USTED TIENE UN DESCUENTO DE:</label>
-                <input type="number" class="form-control" id="txtdescuento" placeholder="name@example.com">
+                <input type="number" class="form-control" id="txtdescuento" th:value="*{descuento}" readonly>
             </div>
             <div class="mb-3">
                 <label for="txtpreciof" class="form-label">SU TOTAL A PAGAR ES DE:</label>
-                <input type="number" class="form-control" id="txtpreciof" placeholder="name@example.com">
+                <input type="number" class="form-control" id="txtpreciof" th:value="*{totalPagar}" readonly>
             </div>
             <button type="submit"
                     class="btn btn-outline-danger">CALCULE SU DESCUENTO</button>
@@ -52,43 +127,45 @@
     </div>
 </div>
 
+
 <div class="card">
     <div class="card-header">
-       BONIFICACION POR PUNTUALIDAD DE PAGOS :
+        BONIFICACIÓN POR PUNTUALIDAD DE PAGOS :
     </div>
     <div class="card-body">
         <form>
             <div class="mb-3">
-                <label for="txtdias" class="form-label">INGRESE LOS DIAS EN LOS QUE HIZO SU PAGO :</label>
+                <label for="txtdias" class="form-label">Ingrese los dias en los que hizo el pago:</label>
                 <input type="number"  class="form-control" id="txtdias" placeholder="name@example.com">
             </div>
             <div class="mb-3">
-                <label for="txttotal" class="form-label">SU TOTAL A PAGAR CON BONIFICACION ES DE :</label>
+                <label for="txttotal" class="form-label">Su total a pagar con bonificacion es de:</label>
                 <input type="number" class="form-control" id="txttotal" placeholder="name@example.com">
             </div>
-            <button type="submit"
-                    class="btn btn-outline-warning">CALCULE SU BONO</button>
+            <button type="submit" class="btn btn-outline-warning">CALCULE SU BONO</button>
         </form>
     </div>
 </div>
+
 <div class="card">
     <div class="card-header">
-         IMPUESTOS SEGUN TIPO DE PRODUCTO:
+        IMPUESTOS SEGÚN TIPO DE PRODUCTO:
     </div>
     <div class="card-body">
         <form>
             <div class="mb-3">
-                <label for="txtcategoria" class="form-label">Ingrese la categoria de su producto :</label>
+                <label for="txtcategoria" class="form-label">Ingrese la categoría de su producto :</label>
                 <input type="text"  class="form-control" id="txtcategoria" placeholder="name@example.com">
             </div>
             <div class="mb-3">
                 <label for="txtproduc" class="form-label">Ingrese el precio de su producto:</label>
                 <input type="number" class="form-control" id="txtproduc" placeholder="name@example.com">
             </div>
-            <button type="submit"
-                    class="btn btn-outline-primary">CALCULE SU TOTAL</button>
+            <button type="submit" class="btn btn-outline-primary">CALCULE SU TOTAL</button>
         </form>
     </div>
 </div>
+
 </body>
 </html>
+
