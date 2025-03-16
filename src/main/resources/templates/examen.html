@@ -1,29 +1,26 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Calcular Comisión</title>
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
-
 </head>
 <body>
 <div class="card">
     <div class="card-header">
-        CALCULAR COMISION
+        CALCULAR COMISIÓN
     </div>
     <div class="card-body">
-        <form>
+        <form th:action="@{/calcularComision}" th:object="${comisionmodel}" method="post">
             <div class="mb-3">
-                <label for="txtsueldo" class="form-label">Ingrese su sueldo :</label>
-                <input type="number"  class="form-control" id="txtsueldo" placeholder="name@example.com">
+                <label for="ventas" class="form-label">Ingrese sus ventas:</label>
+                <input type="number" class="form-control" id="ventas" th:field="*{ventasMensuales}" required>
             </div>
             <div class="mb-3">
-                <label for="txtcomision" class="form-label">COMISION CALCULADA:</label>
-                <input type="number" class="form-control" id="txtcomision" placeholder="name@example.com">
+                <label for="comision" class="form-label">COMISIÓN CALCULADA:</label>
+                <input type="text" class="form-control" id="comision" th:value="${comisionCalculada}" readonly>
             </div>
-            <button type="submit"
-                    class="btn btn-primary">CALCULAR</button>
+            <button type="submit" class="btn btn-primary">CALCULAR</button>
         </form>
     </div>
 </div>
