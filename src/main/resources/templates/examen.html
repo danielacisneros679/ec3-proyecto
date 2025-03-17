@@ -17,7 +17,7 @@
             background-color: #ffffff;
         }
         .card-header {
-            background-color: #6c757d;  /* Cambié el color de fondo de azul a gris */
+            background-color: #6c757d;
             color: #ffffff;
             font-size: 1.2rem;
             text-align: center;
@@ -44,51 +44,18 @@
             border-radius: 5px;
             margin-top: 15px;
         }
-        .btn-outline-success {
-            border-color: #28a745;
-            color: #28a745;
-        }
-        .btn-outline-success:hover {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-outline-danger {
-            border-color: #dc3545;
-            color: #dc3545;
-        }
-        .btn-outline-danger:hover {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-outline-warning {
-            border-color: #ffc107;
-            color: #ffc107;
-        }
-        .btn-outline-warning:hover {
-            background-color: #ffc107;
-            color: white;
-        }
-        .btn-outline-primary {
-            border-color: #007bff;
-            color: #007bff;
-        }
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: white;
-        }
     </style>
 </head>
 <body>
 
+<!-- Tarjeta para calcular comisión -->
 <div class="card">
-    <div class="card-header">
-        CALCULAR COMISIÓN
-    </div>
+    <div class="card-header">CALCULAR COMISIÓN</div>
     <div class="card-body">
-        <form th:action="@{/calcularComision}" th:object="${comisionmodel}" method="post">
+        <form th:action="@{/comision/calcularComision}" th:object="${comisionmodel}" method="post">
             <div class="mb-3">
                 <label for="ventas" class="form-label">Ingrese sus ventas:</label>
-                <input type="number" class="form-control" id="ventas" th:field="*{ventasMensuales}" required>
+                <input type="number" class="form-control" id="ventas" th:field="*{ventasMensuales}" min="0" required>
             </div>
             <div class="mb-3">
                 <label for="comision" class="form-label">COMISIÓN CALCULADA:</label>
@@ -99,73 +66,71 @@
     </div>
 </div>
 
+<!-- Tarjeta para calcular descuento -->
 <div class="card">
-    <div class="card-header">
-        CALCULE SU DESCUENTO POR ANTIGUEDAD:
-    </div>
+    <div class="card-header">CALCULE SU DESCUENTO POR ANTIGÜEDAD</div>
     <div class="card-body">
-        <form th:action="@{/calcularDescuento}" th:object="${descuentomodel}" method="post">
+        <form th:action="@{/descuento/calcularDescuento}" th:object="${descuentomodel}" method="post">
             <div class="mb-3">
-                <label for="txtpreciop" class="form-label">Ingrese el precio de su producto:</label>
-                <input type="number"  class="form-control" id="txtpreciop" th:field="*{producto}" required>
+                <label for="txtpreciop" class="form-label">Ingrese el precio del producto:</label>
+                <input type="number" class="form-control" id="txtpreciop" th:field="*{producto}" min="0" required>
             </div>
             <div class="mb-3">
-                <label for="txtaños" class="form-label">Ingrese los años comprando en la tienda :</label>
-                <input type="number"  class="form-control" id="txtaños" th:field="*{tiempoComprando}" required>
+                <label for="txtaños" class="form-label">Ingrese los años comprando:</label>
+                <input type="number" class="form-control" id="txtaños" th:field="*{tiempoComprando}" min="0" required>
             </div>
             <div class="mb-3">
-                <label for="txtdescuento" class="form-label">USTED TIENE UN DESCUENTO DE:</label>
-                <input type="number" class="form-control" id="txtdescuento" th:value="*{descuento}" readonly>
+                <label for="txtdescuento" class="form-label">Descuento obtenido:</label>
+                <input type="text" class="form-control" id="txtdescuento" th:value="${descuento} + '%'" readonly>
             </div>
             <div class="mb-3">
-                <label for="txtpreciof" class="form-label">SU TOTAL A PAGAR ES DE:</label>
-                <input type="number" class="form-control" id="txtpreciof" th:value="*{totalPagar}" readonly>
+                <label for="txtpreciof" class="form-label">Total a pagar:</label>
+                <input type="text" class="form-control" id="txtpreciof" th:field="*{totalPagar}" readonly>
             </div>
-            <button type="submit"
-                    class="btn btn-outline-danger">CALCULE SU DESCUENTO</button>
+            <button type="submit" class="btn btn-outline-danger">CALCULAR DESCUENTO</button>
         </form>
     </div>
 </div>
 
-
+<!-- Tarjeta para calcular bonificación -->
 <div class="card">
-    <div class="card-header">
-        BONIFICACIÓN POR PUNTUALIDAD DE PAGOS :
-    </div>
+    <div class="card-header">BONIFICACIÓN POR PUNTUALIDAD DE PAGOS</div>
     <div class="card-body">
-        <form>
+        <form th:action="@{/bonificacion/calcularBonificacion}" th:object="${bonificacionmodel}" method="post">
             <div class="mb-3">
-                <label for="txtdias" class="form-label">Ingrese los dias en los que hizo el pago:</label>
-                <input type="number"  class="form-control" id="txtdias" placeholder="name@example.com">
+                <label for="txtdias" class="form-label">Ingrese los días en los que hizo el pago:</label>
+                <input type="number" class="form-control" id="txtdias" th:field="*{dias}" min="0" required>
             </div>
             <div class="mb-3">
-                <label for="txttotal" class="form-label">Su total a pagar con bonificacion es de:</label>
-                <input type="number" class="form-control" id="txttotal" placeholder="name@example.com">
+                <label for="txttotal" class="form-label">Resultado de bonificación:</label>
+                <input type="text" class="form-control" id="txttotal" th:field="*{pagar}" readonly>
             </div>
-            <button type="submit" class="btn btn-outline-warning">CALCULE SU BONO</button>
+            <button type="submit" class="btn btn-outline-warning">CALCULAR BONO</button>
         </form>
     </div>
 </div>
 
+<!-- Tarjeta para calcular impuestos según tipo de producto -->
 <div class="card">
-    <div class="card-header">
-        IMPUESTOS SEGÚN TIPO DE PRODUCTO:
-    </div>
+    <div class="card-header">IMPUESTOS SEGÚN TIPO DE PRODUCTO</div>
     <div class="card-body">
-        <form>
+        <form th:action="@{/calcularCategoria}" th:object="${categoriamodel}" method="post">
             <div class="mb-3">
-                <label for="txtcategoria" class="form-label">Ingrese la categoría de su producto :</label>
-                <input type="text"  class="form-control" id="txtcategoria" placeholder="name@example.com">
+                <label for="txtcategoria" class="form-label">Ingrese la categoría del producto:</label>
+                <input type="text" class="form-control" id="txtcategoria" th:field="*{categoria}" required>
             </div>
             <div class="mb-3">
-                <label for="txtproduc" class="form-label">Ingrese el precio de su producto:</label>
-                <input type="number" class="form-control" id="txtproduc" placeholder="name@example.com">
+                <label for="txtproduc" class="form-label">Ingrese el precio del producto:</label>
+                <input type="number" class="form-control" id="txtproduc" th:field="*{totalPagar}" min="0" required>
             </div>
-            <button type="submit" class="btn btn-outline-primary">CALCULE SU TOTAL</button>
+            <div class="mb-3">
+                <label for="txtPagar" class="form-label">Precio total con impuestos:</label>
+                <input type="text" class="form-control" id="txtPagar" th:value="${categoriamodel.totalPagar}" readonly>
+            </div>
+            <button type="submit" class="btn btn-outline-primary">CALCULAR TOTAL</button>
         </form>
     </div>
 </div>
 
 </body>
 </html>
-
